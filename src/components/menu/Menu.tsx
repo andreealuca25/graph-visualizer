@@ -1,6 +1,6 @@
-import React from "react";
+import { FC } from "react";
 
-const Menu: React.FC = () => {
+const Menu: FC = () => {
   return (
     <ul className="flex flex-row justify-evenly py-8 items-center">
       <li>
