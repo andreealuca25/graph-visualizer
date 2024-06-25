@@ -1,6 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import ContextMenu from "../menu/ContextMenu";
 import GraphNode from "./GraphNode";
+import { useNodeContext, NodeGraph } from "../../contexts/NodeContext";
 
 const GraphContainer: React.FC = () => {
   const [contextMenu, setContextMenu] = useState<{
@@ -8,16 +9,14 @@ const GraphContainer: React.FC = () => {
     y: number;
     items: { label: string; onClick: () => void }[];
   } | null>(null);
-
-  const [nodes, setNodes] = useState<{ id: number; x: number; y: number }[]>(
-    []
-  );
+  const { nodes, setNodes } = useNodeContext();
   const [nodeCount, setNodeCount] = useState(0);
 
   const handleAddNode = (x: number, y: number) => {
-    console.log("handleAddNode");
-    const newNode = { id: nodeCount, x, y };
-    setNodes((prevNodes) => [...prevNodes, newNode]);
+    //TODO: check if there are other nodes which may be overlapping this
+    // and if the selected node is near the edge of the graph container and may go over the edge
+    const newNode: NodeGraph = { id: nodeCount, x, y, val: nodeCount };
+    setNodes((prevNodes: NodeGraph[]) => [...prevNodes, newNode]);
     setNodeCount((prevCount) => prevCount + 1);
   };
 
@@ -56,10 +55,10 @@ const GraphContainer: React.FC = () => {
         className="w-[70vw] h-[60vh] border-4 border-indigo-500/50 flex items-center justify-center"
         onContextMenu={handleContextMenu}
       >
-        {nodes.map((node) => (
+        {nodes.map((node: NodeGraph) => (
           <GraphNode
             key={node.id}
-            nodeValue={`${node.id}`}
+            nodeValue={`${node.val}`}
             style={{
               left: `${node.x}px`,
               top: `${node.y}px`,
