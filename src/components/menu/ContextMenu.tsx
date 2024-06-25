@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 interface ContextMenuProps {
   x: number;
@@ -24,8 +24,8 @@ const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, items, onClose }) => {
 
   return (
     <ul
-      className="absolute bg-white border border-gray-300 shadow-lg list-none p-0 m-0 z-50"
-      style={{ top: y, left: x }}
+      className="bg-white border border-gray-300 shadow-lg list-none p-0 m-0 z-50"
+      style={{ position: "fixed", top: y, left: x }}
       ref={menuRef}
     >
       {items.map((item, index) => (
