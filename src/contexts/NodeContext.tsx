@@ -28,6 +28,7 @@ interface NodeContextType {
   retrieveEdgesByFromNode: (value: number) => NodeGraph[];
   selectedNodes: NodeGraph[];
   setSelectedNodes: Dispatch<SetStateAction<NodeGraph[]>>;
+  removeEdge: (from: NodeGraph, to: NodeGraph) => void;
 }
 
 const NodeContext = createContext<NodeContextType | undefined>(undefined);
@@ -54,6 +55,22 @@ export const NodeProvider = ({ children }: { children: ReactNode }) => {
     return edge ? edge.to : [];
   };
 
+  const removeEdge = (from: NodeGraph, to: NodeGraph): void => {
+    setEdges((prevEdges) => {
+      return prevEdges
+        .map((edge) => {
+          if (edge.from === from.id) {
+            return {
+              ...edge,
+              to: edge.to.filter((node) => node.id !== to.id),
+            };
+          }
+          return edge;
+        })
+        .filter((edge) => edge.to.length > 0);
+    });
+  };
+
   return (
     <NodeContext.Provider
       value={{
@@ -65,6 +82,7 @@ export const NodeProvider = ({ children }: { children: ReactNode }) => {
         selectedNodes,
         setSelectedNodes,
         retrieveEdgesByFromNode,
+        removeEdge,
       }}
     >
       {children}
