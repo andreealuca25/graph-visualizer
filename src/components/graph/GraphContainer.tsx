@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import ContextMenu from "../menu/ContextMenu";
 import GraphNode from "./GraphNode";
 import { useNodeContext, NodeGraph } from "../../contexts/NodeContext";
@@ -52,7 +52,7 @@ const GraphContainer: React.FC = () => {
     setContextMenu(null);
   };
 
-  const renderEdges = () => {
+  const renderEdges = useMemo(() => {
     return edges.flatMap((edge) =>
       edge.to.map((toNode) => {
         const fromNode = nodes.find((node) => node.id === edge.from);
@@ -66,7 +66,7 @@ const GraphContainer: React.FC = () => {
         );
       })
     );
-  };
+  }, [edges]);
 
   return (
     <div className="flex justify-center items-center mx-10 relative">
@@ -83,7 +83,7 @@ const GraphContainer: React.FC = () => {
         className="w-[70vw] h-[60vh] border-4 border-indigo-500/50 relative"
         onContextMenu={handleContextMenu}
       >
-        <svg className="absolute w-full h-full">{renderEdges()}</svg>
+        <svg className="absolute w-full h-full">{renderEdges}</svg>
         {nodes.map((node: NodeGraph) => (
           <GraphNode
             key={node.id}
