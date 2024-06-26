@@ -22,8 +22,10 @@ export interface Edge {
 interface NodeContextType {
   nodes: NodeGraph[];
   edges: Edge[];
+  traversalOrder: NodeGraph[];
   setNodes: Dispatch<SetStateAction<NodeGraph[]>>;
   setEdges: Dispatch<SetStateAction<Edge[]>>;
+  setTraversalOrder: Dispatch<SetStateAction<NodeGraph[]>>;
   retrieveNodeByValue: (value: number) => NodeGraph | undefined;
   retrieveEdgesByFromNode: (value: number) => NodeGraph[];
   selectedNodes: NodeGraph[];
@@ -45,6 +47,7 @@ export const NodeProvider = ({ children }: { children: ReactNode }) => {
   const [nodes, setNodes] = useState<NodeGraph[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
   const [selectedNodes, setSelectedNodes] = useState<NodeGraph[]>([]);
+  const [traversalOrder, setTraversalOrder] = useState<NodeGraph[]>([]);
 
   const retrieveNodeByValue = (val: number): NodeGraph | undefined => {
     return nodes.find((node) => node.val === val);
@@ -83,6 +86,8 @@ export const NodeProvider = ({ children }: { children: ReactNode }) => {
         setSelectedNodes,
         retrieveEdgesByFromNode,
         removeEdge,
+        traversalOrder,
+        setTraversalOrder,
       }}
     >
       {children}

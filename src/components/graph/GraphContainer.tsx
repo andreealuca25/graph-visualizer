@@ -10,7 +10,7 @@ const GraphContainer: React.FC = () => {
     y: number;
     items: { label: string; onClick: () => void }[];
   } | null>(null);
-  const { nodes, setNodes, edges } = useNodeContext();
+  const { nodes, setNodes, edges, traversalOrder } = useNodeContext();
   const [nodeCount, setNodeCount] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -80,22 +80,30 @@ const GraphContainer: React.FC = () => {
       )}
       <div
         ref={containerRef}
-        className="w-[70vw] h-[60vh] border-4 border-indigo-500/50 relative"
+        className="w-[70vw] h-[60vh] border-4 border-indigo-500/50 relative bg-white"
         onContextMenu={handleContextMenu}
       >
         <svg className="absolute w-full h-full">{renderEdges}</svg>
-        {nodes.map((node: NodeGraph) => (
-          <GraphNode
-            key={node.id}
-            nodeValue={node.val}
-            style={{
-              position: "absolute",
-              left: `${node.x}px`,
-              top: `${node.y}px`,
-              transform: "translate(-50%, -50%)",
-            }}
-          />
-        ))}
+        {nodes.map((node: NodeGraph) => {
+          const orderIndex = traversalOrder.findIndex(
+            (traversalNode) => traversalNode.id === node.id
+          );
+          const backgroundColor = orderIndex >= 0 ? "red" : "gray";
+
+          return (
+            <GraphNode
+              key={node.id}
+              nodeValue={node.val}
+              style={{
+                position: "absolute",
+                left: `${node.x}px`,
+                top: `${node.y}px`,
+                transform: "translate(-50%, -50%)",
+                backgroundColor,
+              }}
+            />
+          );
+        })}
       </div>
     </div>
   );
