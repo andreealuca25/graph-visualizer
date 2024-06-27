@@ -15,7 +15,7 @@ const GraphNode: FC<GraphNodeProps> = ({ nodeValue, style }) => {
     edges,
   } = useNodeContext();
 
-  function handleSelectedNode(event: MouseEvent<HTMLButtonElement>): void {
+  const handleSelectedNode = (event: MouseEvent<HTMLButtonElement>): void => {
     if (selectedNodes.length === 1) {
       const toNode = retrieveNodeByValue(nodeValue);
       if (toNode) {
@@ -42,12 +42,15 @@ const GraphNode: FC<GraphNodeProps> = ({ nodeValue, style }) => {
         setSelectedNodes([node]);
       }
     }
-  }
+  };
+
+  const isSelected = selectedNodes.some((node) => node.val === nodeValue);
+  const borderColor = isSelected ? "border-purple-500" : "border-transparent";
 
   return (
     <button
       onClick={handleSelectedNode}
-      className="flex items-center justify-center w-10 h-10 bg-indigo-500 rounded-full absolute text-white"
+      className={`flex items-center justify-center w-10 h-10 rounded-full absolute text-white transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-200 hover:scale-110 border-4 ${borderColor}`}
       style={style}
     >
       {nodeValue}

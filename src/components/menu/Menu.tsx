@@ -1,10 +1,6 @@
 import { FC, useState, useEffect } from "react";
 import { useNodeContext, NodeGraph } from "../../contexts/NodeContext";
-import {
-  dijkstra,
-  bellmanFord,
-  aStar,
-} from ".//../../util/traversal-algorithms";
+import { dijkstra, bellmanFord, aStar } from "../../util/traversal-algorithms";
 
 const Menu: FC = () => {
   const [selectedAlgorithm, setSelectedAlgorithm] =
@@ -72,9 +68,12 @@ const Menu: FC = () => {
   };
 
   return (
-    <ul className="flex flex-row justify-evenly py-8 items-center">
-      <li>
-        <label htmlFor="algorithm-select" className="mr-2">
+    <ul className="flex flex-row justify-evenly py-8 items-center space-x-4">
+      <li className="bg-purple-400 p-2 rounded">
+        <label
+          htmlFor="algorithm-select"
+          className="mr-2 font-semibold text-white"
+        >
           Select algorithm:
         </label>
         <select
@@ -88,8 +87,8 @@ const Menu: FC = () => {
           <option value="a-star">A* Algorithm</option>
         </select>
       </li>
-      <li>
-        <label htmlFor="start-node" className="mr-2">
+      <li className="bg-purple-400 p-2 rounded">
+        <label htmlFor="start-node" className="mr-2 font-semibold text-white">
           Start node:
         </label>
         <select
@@ -108,8 +107,8 @@ const Menu: FC = () => {
           ))}
         </select>
       </li>
-      <li>
-        <label htmlFor="end-node" className="mr-2">
+      <li className="bg-purple-400 p-2 rounded">
+        <label htmlFor="end-node" className="mr-2 font-semibold text-white">
           End node:
         </label>
         <select
@@ -130,7 +129,7 @@ const Menu: FC = () => {
       </li>
       <li>
         <button
-          className="bg-indigo-500 text-white px-4 py-2 rounded-md"
+          className="bg-indigo-500 text-white px-4 py-2 rounded-md transition-colors duration-200 hover:bg-indigo-600"
           onClick={handleStart}
           disabled={startNode === null || endNode === null}
         >
@@ -139,7 +138,7 @@ const Menu: FC = () => {
       </li>
       <li>
         <button
-          className="bg-red-500 text-white px-4 py-2 rounded-md"
+          className="bg-red-500 text-white px-4 py-2 rounded-md transition-colors duration-200 hover:bg-red-600"
           onClick={handleReset}
         >
           Reset

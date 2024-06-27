@@ -15,31 +15,19 @@ const GraphContainer: React.FC = () => {
   const [nodeCount, setNodeCount] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [errorVisible, setErrorVisible] = useState(false);
-  const showError = () => {
-    setErrorVisible(true);
-  };
-
-  const closeError = () => {
-    setErrorVisible(false);
-  };
 
   const handleAddNode = (x: number, y: number) => {
     if (containerRef.current) {
-      const containerRect = containerRef.current.getBoundingClientRect(); //container element relative to the viewport
+      const containerRect = containerRef.current.getBoundingClientRect();
       const newX = x - containerRect.left;
       const newY = y - containerRect.top;
       const margin = 30;
 
-      const withinLeftMargin = newX < margin;
-      const withinRightMargin = newX > containerRect.width - margin;
-      const withinTopMargin = newY < margin;
-      const withinBottomMargin = newY > containerRect.height - margin;
-
       if (
-        withinLeftMargin ||
-        withinRightMargin ||
-        withinTopMargin ||
-        withinBottomMargin
+        newX < margin ||
+        newX > containerRect.width - margin ||
+        newY < margin ||
+        newY > containerRect.height - margin
       ) {
         setErrorVisible(true);
         return;
@@ -73,10 +61,6 @@ const GraphContainer: React.FC = () => {
     });
   };
 
-  const handleCloseContextMenu = () => {
-    setContextMenu(null);
-  };
-
   const renderEdges = useMemo(() => {
     return edges.flatMap((edge) =>
       edge.to.map((toNode) => {
@@ -100,7 +84,7 @@ const GraphContainer: React.FC = () => {
           x={contextMenu.x}
           y={contextMenu.y}
           items={contextMenu.items}
-          onClose={handleCloseContextMenu}
+          onClose={() => setContextMenu(null)}
         />
       )}
       <div
@@ -133,7 +117,7 @@ const GraphContainer: React.FC = () => {
         <ErrorNotification
           message="Node position is within the margin. Node not added."
           visible={errorVisible}
-          onClose={closeError}
+          onClose={() => setErrorVisible(false)}
         />
       </div>
     </div>

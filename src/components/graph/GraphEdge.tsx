@@ -8,9 +8,6 @@ interface GraphEdgeProps {
 
 const GraphEdge: FC<GraphEdgeProps> = ({ from, to }) => {
   const { removeEdge } = useNodeContext();
-  const handleDeleteEdge = () => {
-    removeEdge(from, to);
-  };
 
   return (
     <g className="group">
@@ -24,8 +21,8 @@ const GraphEdge: FC<GraphEdgeProps> = ({ from, to }) => {
       >
         <div className="relative w-full h-full">
           <button
-            onClick={handleDeleteEdge}
-            className="hidden group-hover:flex items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer border-none rounded-full w-8 h-8 text-s font-bold "
+            onClick={() => removeEdge(from, to)}
+            className="hidden group-hover:flex items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer border-none rounded-full w-8 h-8 text-s font-bold bg-red-500 text-white"
           >
             &#10006;
           </button>
