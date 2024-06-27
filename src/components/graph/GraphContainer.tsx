@@ -3,6 +3,7 @@ import ContextMenu from "../menu/ContextMenu";
 import GraphNode from "./GraphNode";
 import { useNodeContext, NodeGraph } from "../../contexts/NodeContext";
 import GraphEdge from "./GraphEdge";
+import ErrorNotification from "../notification/ErrorNotification";
 
 const GraphContainer: React.FC = () => {
   const [contextMenu, setContextMenu] = useState<{
@@ -13,12 +14,36 @@ const GraphContainer: React.FC = () => {
   const { nodes, setNodes, edges, traversalOrder } = useNodeContext();
   const [nodeCount, setNodeCount] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [errorVisible, setErrorVisible] = useState(false);
+  const showError = () => {
+    setErrorVisible(true);
+  };
+
+  const closeError = () => {
+    setErrorVisible(false);
+  };
 
   const handleAddNode = (x: number, y: number) => {
     if (containerRef.current) {
       const containerRect = containerRef.current.getBoundingClientRect(); //container element relative to the viewport
       const newX = x - containerRect.left;
       const newY = y - containerRect.top;
+      const margin = 30;
+
+      const withinLeftMargin = newX < margin;
+      const withinRightMargin = newX > containerRect.width - margin;
+      const withinTopMargin = newY < margin;
+      const withinBottomMargin = newY > containerRect.height - margin;
+
+      if (
+        withinLeftMargin ||
+        withinRightMargin ||
+        withinTopMargin ||
+        withinBottomMargin
+      ) {
+        setErrorVisible(true);
+        return;
+      }
 
       const newNode: NodeGraph = {
         id: nodeCount,
@@ -104,6 +129,12 @@ const GraphContainer: React.FC = () => {
             />
           );
         })}
+
+        <ErrorNotification
+          message="Node position is within the margin. Node not added."
+          visible={errorVisible}
+          onClose={closeError}
+        />
       </div>
     </div>
   );
